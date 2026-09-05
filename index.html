@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎂 Happy Birthday Mell!</title>
+    <link rel="stylesheet"href="style.css" />
+       
+        
+</head>
+<body>
+
+    <!-- ─── PARTICLES ─── -->
+    <div id="particles"></div>
+
+    <!-- ─── MUSIC PLAYER ─── -->
+    <div class="music-player" id="musicPlayer">
+        <span class="note">🎵</span>
+        <span class="status" id="musicStatus">Playing</span>
+        <button class="toggle" id="musicToggle">⏸</button>
+    </div>
+
+    <!-- ─── MAIN ─── -->
+    <div class="wrap">
+
+        <!-- NAV -->
+        <nav>
+            <div class="logo">🎂 <span>Mell</span>'s Day</div>
+            <div class="nav-links">
+                <button class="active-nav" data-page="home">🏠 Home</button>
+                <button data-page="wishes">💌 Letter</button>
+                <button data-page="gifts">🎁 Gifts</button>
+            </div>
+        </nav>
+
+        <!-- ─── HOME ─── -->
+        <section id="home" class="page active">
+            <div class="hero">
+                <div class="eyebrow">✨ Today is all about you ✨</div>
+                <span class="cake-emoji">🎂</span>
+                <h1>Happy<br /><span class="highlight">Birthday</span> Mell!</h1>
+                <div class="sub-text">
+                    “If life is a movie, oh, you’re the best part.” <br />
+                    And honestly… if I had to choose one person to make this life a little brighter,<br />
+                    it would always be <strong>you</strong>.Happy Birthday, princess 🤍
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-pink" onclick="showPage('wishes')">💌 Birthday Letter</button>
+                    <button class="btn btn-purple" onclick="showPage('gifts')">🎁 Open Gifts</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── WISHES / LETTER ─── -->
+        <section id="wishes" class="page">
+            <div class="card">
+                <h2>💖 Birthday Wishes</h2>
+                <div class="letter-paper">
+                    <h3>Dear Mell,</h3>
+                    <p>Honestly, having you  is something I’m grateful for. I hope this new chapter brings you nothing but <strong>happiness, success, peace, good health</strong>, and all the beautiful things you deserve.</p>
+                    <p>May God continue to bless you, protect you, and make everything you’ve been praying for come your way. 🙏🏽❤️</p>
+                    <p>Just remember — you’re getting older and you can't go back to being 16, so <strong>enjoy every part of your day</strong>. Birthday princess, get spoiled, take plenty pictures, and make sure you save some of that beautiful smile for me 😌❤️.</p>
+                    <p>Happy birthday once again, More life and more blessings</p>
+                    <div class="signature">— Selikem 🤍 <p> ps: i know the letter is ass sorry my mind was more on the design and planing of the code hope u like it tho :-) </div>
+                </div>
+                <div class="btn-group" style="margin-top:20px;">
+                    <button class="btn btn-sm btn-outline" onclick="showPage('home')">← Back Home</button>
+                    <button class="btn btn-sm btn-pink" onclick="showPage('gifts')">🎁 See Gifts</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── GIFTS ─── -->
+        <section id="gifts" class="page">
+            <div class="card">
+                <h2>🎁 A Surprise for You!</h2>
+                <p style="text-align:center; max-width:420px; margin:0 auto 6px;">Tap a gift to reveal your surprise. 💝</p>
+                <div class="gift-grid" id="giftGrid">
+                    <!-- filled by JS -->
+                </div>
+                <div class="btn-group" style="margin-top:24px;">
+                    <button class="btn btn-sm btn-outline" onclick="showPage('home')">← Back Home</button>
+                    <button class="btn btn-sm btn-purple" onclick="showPage('wishes')">💌 Read Letter</button>
+                </div>
+        </section>
+
+       
+
+    <!-- ─── AUDIO ─── -->
+    <audio id="bgMusic" loop>
+        <source src="HER_-_Best_Part_CeeNaija.com_.mp3" type="audio/mpeg" />
+    </audio>
+    <script src="script.js"></script>
+
+</body>
+</html>
