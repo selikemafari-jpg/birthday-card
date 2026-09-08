@@ -167,253 +167,212 @@
         });
 
         console.log('🎂 Happy Birthday Mell! 🎉');
-       (function() {
-        "use strict";
+       // ============================================================
+//  MEMORIES VIEWER — JavaScript only (no HTML/CSS)
+// ============================================================
 
-        // --------------------------------------------------------------
-        // 1. DEFINE YOUR MEMORIES — replace with your own images/videos
-        //    Each item: { type: 'image' or 'video', src: 'path' }
-        // -------------------------------------------------------------
-        const memories = [{
-            type: 'image',
-            src: 'https://picsum.photos/id/1015/600/800'
-        }, {
-            type: 'image',
-            src: 'https://picsum.photos/id/1016/600/800'
-        }, {
-            type: 'image',
-            src: 'https://picsum.photos/id/1018/600/800'
-        }, {
-            type: 'video',
-            src: 'https://www.w3schools.com/html/mov_bbb.mp4'
-        }, {
-            type: 'image',
-            src: 'https://picsum.photos/id/1020/600/800'
-        }, {
-            type: 'video',
-            src: 'https://www.w3schools.com/html/mov_bbb.mp4'
-        }, {
-            type: 'image',
-            src: 'https://picsum.photos/id/1024/600/800'
-        }, {
-            type: 'image',
-            src: 'https://picsum.photos/id/1027/600/800'
-        }, ];
-        // --------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', function() {
+    "use strict";
 
-        // DOM refs
-        const overlay = document.getElementById('memoriesOverlay');
-        const openBtn = document.getElementById('memoriesBtn');
-        const closeBtn = document.getElementById('memCloseBtn');
-        const track = document.getElementById('memTrack');
-        const dotsContainer = document.getElementById('memDots');
-        const counter = document.getElementById('memCounter');
-        const prevBtn = document.getElementById('memPrev');
-        const nextBtn = document.getElementById('memNext');
+    // ----- YOUR MEDIA DATA (replace with your own) -----
+    const memories = [
+        { type: 'image', src: 'bithday1.jpeg' },
+        { type: 'image', src: 'https://picsum.photos/id/1016/600/800' },
+        { type: 'image', src: 'https://picsum.photos/id/1018/600/800' },
+        { type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+        { type: 'image', src: 'https://picsum.photos/id/1020/600/800' },
+        { type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+        { type: 'image', src: 'https://picsum.photos/id/1024/600/800' },
+        { type: 'image', src: 'https://picsum.photos/id/1027/600/800' }
+    ];
 
-        let currentIndex = 0;
-        let total = memories.length;
-        let isOpen = false;
+    // ----- DOM ELEMENTS (must match your HTML IDs) -----
+    const overlay      = document.getElementById('memoriesOverlay');
+    const openBtn      = document.getElementById('memoriesBtn');
+    const closeBtn     = document.getElementById('memCloseBtn');
+    const track        = document.getElementById('memTrack');
+    const dotsContainer= document.getElementById('memDots');
+    const counter      = document.getElementById('memCounter');
+    const prevBtn      = document.getElementById('memPrev');
+    const nextBtn      = document.getElementById('memNext');
 
-        // ---------- RENDER SLIDES ----------
-        function renderSlides() {
-            track.innerHTML = '';
-            dotsContainer.innerHTML = '';
+    // Safety: stop if any element is missing
+    if (!overlay || !openBtn || !closeBtn || !track || !dotsContainer || !counter || !prevBtn || !nextBtn) {
+        console.error('Memories: One or more DOM elements not found. Check IDs.');
+        return;
+    }
 
-            memories.forEach((item, idx) => {
-                // Slide wrapper
-                const slide = document.createElement('div');
-                slide.className = 'mem-slide';
+    let currentIndex = 0;
+    const total = memories.length;
+    let isOpen = false;
 
-                const inner = document.createElement('div');
-                inner.className = 'mem-slide-inner';
+    // ----- RENDER SLIDES & DOTS -----
+    function renderSlides() {
+        track.innerHTML = '';
+        dotsContainer.innerHTML = '';
 
-                let media;
-                if (item.type === 'video') {
-                    media = document.createElement('video');
-                    media.src = item.src;
-                    media.muted = true;
-                    media.playsInline = true;
-                    media.loop = true;
-                    media.setAttribute('preload', 'metadata');
-                    // click to play/pause
-                    media.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        if (this.paused) this.play();
-                        else this.pause();
-                    });
-                } else {
-                    media = document.createElement('img');
-                    media.src = item.src;
-                    media.alt = 'Memory ' + (idx + 1);
-                    media.loading = 'lazy';
-                }
-
-                inner.appendChild(media);
-                slide.appendChild(inner);
-                track.appendChild(slide);
-
-                // Dot
-                const dot = document.createElement('button');
-                dot.className = 'mem-dot' + (idx === 0 ? ' active' : '');
-                dot.dataset.index = idx;
-                dot.addEventListener('click', function() {
-                    goTo(parseInt(this.dataset.index));
-                });
-                dotsContainer.appendChild(dot);
-            });
-
-            updateUI();
-            updateArrowVisibility();
-        }
-
-        // ---------- UPDATE UI (position, counter, dots) ----------
-        function updateUI() {
-            // Move track
-            track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
-
-            // Counter
-            counter.textContent = (currentIndex + 1) + ' / ' + total;
-
-            // Dots
-            const dots = dotsContainer.querySelectorAll('.mem-dot');
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentIndex);
-            });
-
-            // Pause all videos except the current one
-            const allVideos = track.querySelectorAll('video');
-            allVideos.forEach((v, i) => {
-                if (i === currentIndex) {
-                    // don't auto-play, let user decide
-                } else {
-                    v.pause();
-                }
-            });
-        }
-
-        function updateArrowVisibility() {
-            if (total <= 1) {
-                prevBtn.classList.add('hidden');
-                nextBtn.classList.add('hidden');
-            } else {
-                prevBtn.classList.remove('hidden');
-                nextBtn.classList.remove('hidden');
-            }
-        }
-
-        // ---------- NAVIGATION ----------
-        function goTo(index) {
-            if (index < 0) index = total - 1;
-            if (index >= total) index = 0;
-            if (index === currentIndex) return;
-            currentIndex = index;
-            updateUI();
-        }
-
-        function next() {
-            goTo(currentIndex + 1);
-        }
-
-        function prev() {
-            goTo(currentIndex - 1);
-        }
-
-        // ---------- OPEN / CLOSE ----------
-        function openMemories() {
-            overlay.classList.add('open');
-            document.body.style.overflow = 'hidden';
-            isOpen = true;
-            // reset to first slide
-            currentIndex = 0;
-            updateUI();
-            // preload adjacent media
-        }
-
-        function closeMemories() {
-            overlay.classList.remove('open');
-            document.body.style.overflow = '';
-            isOpen = false;
-            // pause all videos
-            track.querySelectorAll('video').forEach(v => v.pause());
-        }
-
-        // ---------- EVENT LISTENERS ----------
-        openBtn.addEventListener('click', openMemories);
-        closeBtn.addEventListener('click', closeMemories);
-
-        // Click on backdrop → close (but not on slider content)
-        overlay.addEventListener('click', function(e) {
-            if (e.target === overlay) {
-                closeMemories();
-            }
-        });
-
-        // ESC key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && isOpen) closeMemories();
-            if (e.key === 'ArrowLeft' && isOpen) prev();
-            if (e.key === 'ArrowRight' && isOpen) next();
-        });
-
-        // Arrow buttons
-        prevBtn.addEventListener('click', prev);
-        nextBtn.addEventListener('click', next);
-
-        // ---------- TOUCH SWIPE SUPPORT ----------
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let isSwiping = false;
-
-        const slider = document.getElementById('memSlider');
-
-        slider.addEventListener('touchstart', function(e) {
-            const touch = e.touches[0];
-            touchStartX = touch.clientX;
-            touchStartY = touch.clientY;
-            isSwiping = true;
-        }, { passive: true });
-
-        slider.addEventListener('touchmove', function(e) {
-            if (!isSwiping) return;
-            // prevent vertical scroll while swiping horizontally
-            const touch = e.touches[0];
-            const deltaX = touch.clientX - touchStartX;
-            const deltaY = touch.clientY - touchStartY;
-            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 20) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-
-        slider.addEventListener('touchend', function(e) {
-            if (!isSwiping) return;
-            isSwiping = false;
-            const touch = e.changedTouches[0];
-            const deltaX = touch.clientX - touchStartX;
-            const deltaY = touch.clientY - touchStartY;
-            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
-                if (deltaX < 0) next();
-                else prev();
-            }
-        }, { passive: true });
-
-        // ---------- INIT ----------
-        renderSlides();
-
-        // fix: if total is 0, show a message
         if (total === 0) {
-            track.innerHTML = `
-                        <div class="mem-slide">
-                            <div class="mem-slide-inner" style="color:#888;font-size:1.4rem;text-align:center;padding:40px;">
-                                No memories yet ✨
-                            </div>
-                        </div>
-                    `;
-            dotsContainer.innerHTML = '';
+            track.innerHTML = `<div class="mem-slide"><div class="mem-slide-inner" style="color:#888;font-size:1.4rem;text-align:center;">No memories yet ✨</div></div>`;
             counter.textContent = '0 / 0';
             prevBtn.classList.add('hidden');
             nextBtn.classList.add('hidden');
+            return;
         }
 
-        console.log('📸 Memories viewer ready! (' + total + ' items)');
-    })();
+        memories.forEach((item, idx) => {
+            // Slide
+            const slide = document.createElement('div');
+            slide.className = 'mem-slide';
+            const inner = document.createElement('div');
+            inner.className = 'mem-slide-inner';
+
+            let media;
+            if (item.type === 'video') {
+                media = document.createElement('video');
+                media.src = item.src;
+                media.muted = true;
+                media.playsInline = true;
+                media.loop = true;
+                media.preload = 'metadata';
+                media.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    this.paused ? this.play() : this.pause();
+                });
+            } else {
+                media = document.createElement('img');
+                media.src = item.src;
+                media.alt = 'Memory ' + (idx + 1);
+                media.loading = 'lazy';
+            }
+
+            inner.appendChild(media);
+            slide.appendChild(inner);
+            track.appendChild(slide);
+
+            // Dot
+            const dot = document.createElement('button');
+            dot.className = 'mem-dot' + (idx === 0 ? ' active' : '');
+            dot.dataset.index = idx;
+            dot.addEventListener('click', function() {
+                goTo(parseInt(this.dataset.index));
+            });
+            dotsContainer.appendChild(dot);
+        });
+
+        updateUI();
+        updateArrowVisibility();
+    }
+
+    // ----- UPDATE UI (position, counter, dots) -----
+    function updateUI() {
+        if (total === 0) return;
+        track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+        counter.textContent = (currentIndex + 1) + ' / ' + total;
+
+        const dots = dotsContainer.querySelectorAll('.mem-dot');
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+
+        // Pause all videos except the current one
+        track.querySelectorAll('video').forEach((v, i) => {
+            if (i !== currentIndex) v.pause();
+        });
+    }
+
+    function updateArrowVisibility() {
+        if (total <= 1) {
+            prevBtn.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+        } else {
+            prevBtn.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+        }
+    }
+
+    // ----- NAVIGATION -----
+    function goTo(index) {
+        if (total === 0) return;
+        if (index < 0) index = total - 1;
+        if (index >= total) index = 0;
+        if (index === currentIndex) return;
+        currentIndex = index;
+        updateUI();
+    }
+
+    function next() { goTo(currentIndex + 1); }
+    function prev() { goTo(currentIndex - 1); }
+
+    // ----- OPEN / CLOSE -----
+    function openMemories() {
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        isOpen = true;
+        currentIndex = 0;
+        updateUI();
+        console.log('Memories opened');
+    }
+
+    function closeMemories() {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+        isOpen = false;
+        track.querySelectorAll('video').forEach(v => v.pause());
+        console.log('Memories closed');
+    }
+
+    // ----- EVENT LISTENERS -----
+    openBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        openMemories();
+    });
+
+    closeBtn.addEventListener('click', closeMemories);
+
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closeMemories();
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && isOpen) closeMemories();
+        if (e.key === 'ArrowLeft' && isOpen) prev();
+        if (e.key === 'ArrowRight' && isOpen) next();
+    });
+
+    prevBtn.addEventListener('click', prev);
+    nextBtn.addEventListener('click', next);
+
+    // ----- TOUCH SWIPE SUPPORT -----
+    let touchStartX = 0, touchStartY = 0, isSwiping = false;
+    const slider = document.getElementById('memSlider');
+
+    slider.addEventListener('touchstart', function(e) {
+        const t = e.touches[0];
+        touchStartX = t.clientX;
+        touchStartY = t.clientY;
+        isSwiping = true;
+    }, { passive: true });
+
+    slider.addEventListener('touchmove', function(e) {
+        if (!isSwiping) return;
+        const t = e.touches[0];
+        const dx = t.clientX - touchStartX;
+        const dy = t.clientY - touchStartY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 20) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    slider.addEventListener('touchend', function(e) {
+        if (!isSwiping) return;
+        isSwiping = false;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - touchStartX;
+        const dy = t.clientY - touchStartY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+            if (dx < 0) next(); else prev();
+        }
+    }, { passive: true });
+
+    // ----- INIT -----
+    renderSlides();
+    console.log('Memories viewer initialized. Total items:', total);
+});
