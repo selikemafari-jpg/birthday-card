@@ -93,8 +93,36 @@
         <source src="HER_-_Best_Part_CeeNaija.com_.mp3" type="audio/mpeg" />
     </audio>
     <script src="script.js"></script>
+
         
-     
+        <!-- ============ BUTTON ============ -->
+<button class="mem-btn" id="memoriesBtn">📸 Memories</button>
+
+<!-- ============ FULL-SCREEN OVERLAY ============ -->
+<div class="mem-overlay" id="memoriesOverlay">
+
+    <!-- Close -->
+    <button class="mem-close" id="memCloseBtn">✕</button>
+
+    <!-- Counter -->
+    <div class="mem-counter" id="memCounter">1 / 0</div>
+
+    <!-- Slider -->
+    <div class="mem-slider" id="memSlider">
+
+        <!-- Track (slides will be injected here by JS) -->
+        <div class="mem-track" id="memTrack">
+            <!-- slides are rendered by JavaScript -->
+        </div>
+
+        <!-- Arrows -->
+        <button class="mem-arrow prev" id="memPrev" aria-label="Previous">‹</button>
+        <button class="mem-arrow next" id="memNext" aria-label="Next">›</button>
+
+        <!-- Dots -->
+        <div class="mem-dots" id="memDots"></div>
+    </div>
+</div>
 
 </body>
 </html>
