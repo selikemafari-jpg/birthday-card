@@ -406,7 +406,7 @@ const memories = [
 
     {
         type: 'video',
-        src: 'video2.mp4'
+        src: 'memories/video2.mp4'
     }
 
 ];
