@@ -48,10 +48,7 @@
                 <div class="btn-group">
                     <button class="btn btn-pink" onclick="showPage('wishes')">💌 Birthday Letter</button>
                     <button class="btn btn-purple" onclick="showPage('gifts')">🎁 Open Gifts</button>
-                </div>
-            </div>
-        </section>
-
+                   
         <!-- ─── WISHES / LETTER ─── -->
         <section id="wishes" class="page">
             <div class="card">
@@ -67,6 +64,13 @@
                 <div class="btn-group" style="margin-top:20px;">
                     <button class="btn btn-sm btn-outline" onclick="showPage('home')">← Back Home</button>
                     <button class="btn btn-sm btn-pink" onclick="showPage('gifts')">🎁 See Gifts</button>
+                    <div id="memoriesOverlay">
+                        <button id="memoryHomeBtn">🏠 Home</button>
+                        <button id="memoryPrev" class="memory-arrow">‹</button>
+                        <div id="memoryViewer"></div>
+                        <button id="memoryNext" class="memory-arrow">›</button>
+                        <div id="memoryDots"></div>
+
                 </div>
             </div>
         </section>
