@@ -391,7 +391,7 @@ const memories = [
 
     {
         type: 'image',
-        src: 'memories/memory2.jpeg.jpeg'
+        src: 'memories/memory2.jpeg'
     },
 
     {
