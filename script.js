@@ -386,7 +386,7 @@ const memories = [
 
     {
         type: 'image',
-        src: 'memories/memory1.jpeg'
+        src: 'memories/memory1.jpeg.jpeg'
     },
 
     {
@@ -396,7 +396,7 @@ const memories = [
 
     {
         type: 'video',
-        src: 'video1.mp4'
+        src: 'memories/video1.mp4.mp4'
     },
 
     {
