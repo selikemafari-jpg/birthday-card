@@ -568,4 +568,297 @@
                 padding: 10px 18px;
             }
         }
-       
+        /* ---------- MEMORIES BUTTON ---------- */
+    .mem-btn {
+        padding: 14px 40px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #f093fb, #f5576c);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+        z-index: 10;
+        position: relative;
+    }
+    .mem-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 35px rgba(245, 87, 108, 0.5);
+    }
+    .mem-btn:active {
+        transform: scale(0.95);
+    }
+
+    /* ---------- OVERLAY (full-screen) ---------- */
+    .mem-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #0b0b0e;
+        z-index: 99999;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        animation: memFadeIn 0.35s ease;
+        overscroll-behavior: none;
+    }
+    .mem-overlay.open {
+        display: flex;
+    }
+
+    @keyframes memFadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* ---------- CLOSE BUTTON (top-right) ---------- */
+    .mem-close {
+        position: absolute;
+        top: 20px;
+        right: 24px;
+        background: rgba(255, 255, 255, 0.12);
+        border: none;
+        color: #fff;
+        font-size: 2.4rem;
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        cursor: pointer;
+        backdrop-filter: blur(8px);
+        transition: background 0.2s, transform 0.2s;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        font-weight: 300;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    .mem-close:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: scale(1.1);
+    }
+    .mem-close:active {
+        transform: scale(0.9);
+    }
+
+    /* ---------- COUNTER (top-left) ---------- */
+    .mem-counter {
+        position: absolute;
+        top: 24px;
+        left: 28px;
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 1rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        background: rgba(0, 0, 0, 0.35);
+        padding: 6px 18px;
+        border-radius: 30px;
+        backdrop-filter: blur(4px);
+        z-index: 20;
+        user-select: none;
+        font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* ---------- SLIDER CONTAINER ---------- */
+    .mem-slider {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        touch-action: pan-y;
+        /* allow vertical scroll only, horizontal is for swipes */;
+    }
+
+    /* ---------- TRACK (holds all items) ---------- */
+    .mem-track {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        will-change: transform;
+    }
+
+    /* ---------- EACH SLIDE (portrait, full height) ---------- */
+    .mem-slide {
+        flex: 0 0 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #0b0b0e;
+        padding: 0 8px;
+        /* small side padding for breathing */;
+    }
+    .mem-slide-inner {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 500px;
+        /* portrait friendly max width */
+        max-height: 90vh;
+        padding: 10px 0;
+    }
+    .mem-slide-inner img,
+    .mem-slide-inner video {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        /* show full image/video without cropping */
+        border-radius: 12px;
+        background: #111;
+        box-shadow: 0 12px 60px rgba(0, 0, 0, 0.7);
+        user-select: none;
+        -webkit-user-drag: none;
+    }
+
+    /* ---------- NAVIGATION ARROWS ---------- */
+    .mem-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.08);
+        border: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 2.6rem;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        cursor: pointer;
+        backdrop-filter: blur(6px);
+        transition: background 0.25s, color 0.25s, transform 0.2s;
+        z-index: 15;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        font-weight: 300;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        user-select: none;
+        touch-action: manipulation;
+    }
+    .mem-arrow:hover {
+        background: rgba(255, 255, 255, 0.18);
+        color: #fff;
+    }
+    .mem-arrow:active {
+        transform: translateY(-50%) scale(0.92);
+    }
+    .mem-arrow.prev {
+        left: 16px;
+    }
+    .mem-arrow.next {
+        right: 16px;
+    }
+
+    /* hide arrows if only one item */
+    .mem-arrow.hidden {
+        display: none;
+    }
+
+    /* ---------- DOTS / INDICATORS (bottom) ---------- */
+    .mem-dots {
+        position: absolute;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        z-index: 15;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 8px 16px;
+        border-radius: 40px;
+        backdrop-filter: blur(6px);
+    }
+    .mem-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.25);
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+        touch-action: manipulation;
+    }
+    .mem-dot.active {
+        background: #f5576c;
+        transform: scale(1.25);
+        box-shadow: 0 0 12px rgba(245, 87, 108, 0.5);
+    }
+    .mem-dot:hover {
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 540px) {
+        .mem-arrow {
+            width: 40px;
+            height: 40px;
+            font-size: 1.8rem;
+        }
+        .mem-arrow.prev {
+            left: 6px;
+        }
+        .mem-arrow.next {
+            right: 6px;
+        }
+        .mem-close {
+            top: 14px;
+            right: 14px;
+            width: 44px;
+            height: 44px;
+            font-size: 1.8rem;
+        }
+        .mem-counter {
+            top: 16px;
+            left: 16px;
+            font-size: 0.85rem;
+            padding: 4px 14px;
+        }
+        .mem-dots {
+            gap: 8px;
+            padding: 6px 14px;
+            bottom: 16px;
+        }
+        .mem-dot {
+            width: 8px;
+            height: 8px;
+        }
+        .mem-slide-inner {
+            max-height: 85vh;
+            padding: 4px 0;
+        }
+        .mem-slide {
+            padding: 0 4px;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .mem-arrow {
+            width: 32px;
+            height: 32px;
+            font-size: 1.4rem;
+        }
+        .mem-arrow.prev {
+            left: 2px;
+        }
+        .mem-arrow.next {
+            right: 2px;
+        }
+    }
