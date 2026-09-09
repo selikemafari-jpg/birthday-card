@@ -386,12 +386,12 @@ const memories = [
 
     {
         type: 'image',
-        src: 'memory1.jpg'
+        src: 'memory1.jpeg'
     },
 
     {
         type: 'image',
-        src: 'memories/memory2.jpg'
+        src: 'memories/memory2.jpeg'
     },
 
     {
