@@ -167,11 +167,11 @@
         });
 
         console.log('🎂 Happy Birthday Mell! 🎉');
-MEMORIES
-========================================= */
+/* =====================================================
+   MEMORIES VIEWER
+===================================================== */
 
 const memories = [
-
     {
         type: "image",
         src: "memories/memory1.jpg"
@@ -196,67 +196,52 @@ const memories = [
         type: "video",
         src: "memories/video2.mp4"
     }
-
 ];
 
 
 let currentMemory = 0;
 
-const memoriesOverlay =
-    document.getElementById("memoriesOverlay");
 
-const memoryViewer =
-    document.getElementById("memoryViewer");
+/* Get Memories elements */
 
-const memoryDots =
-    document.getElementById("memoryDots");
+const memoriesOverlay = document.getElementById("memoriesOverlay");
+const memoryViewer = document.getElementById("memoryViewer");
+const memoryDots = document.getElementById("memoryDots");
 
-const memoryPrev =
-    document.getElementById("memoryPrev");
+const memoryPrev = document.getElementById("memoryPrev");
+const memoryNext = document.getElementById("memoryNext");
+const memoryHomeBtn = document.getElementById("memoryHomeBtn");
+===================================================== */
 
-const memoryNext =
-    document.getElementById("memoryNext");
+const originalShowPage = showPage;
 
-const memoryHomeBtn =
-    document.getElementById("memoryHomeBtn");
-
-
-/* =========================================
-   YOUR EXISTING NAVIGATION
-
-   This uses:
-
-   data-page="memories"
-
-   So your button DOES NOT need changing.
-========================================= */
-
-document.querySelectorAll("[data-page]").forEach(button => {
-
-    button.addEventListener("click", function () {
-
-        const page = this.dataset.page;
-
-        if (page === "memories") {
-
-            openMemories();
-
-        }
-
-    });
-
-});
-
-
-/* =========================================
-   OPEN MEMORIES
-========================================= */
-
-function openMemories() {
+showPage = function(id) {
 
     /*
-     * Always start from memory #1
+     * If Memories is selected
      */
+    if (id === "memories") {
+
+        openMemories();
+
+        return;
+    }
+
+    /*
+     * If another page is selected,
+     * close Memories first.
+     */
+    closeMemories();
+
+    originalShowPage(id);
+};
+
+
+/* =====================================================
+   OPEN MEMORIES
+===================================================== */
+
+function openMemories() {
 
     currentMemory = 0;
 
@@ -265,35 +250,36 @@ function openMemories() {
     memoriesOverlay.style.display = "flex";
 
     /*
-     * Lock the birthday page
+     * Lock the birthday website behind it.
      */
-
     document.body.style.overflow = "hidden";
+
 }
 
 
-/* =========================================
+/* =====================================================
    CLOSE MEMORIES
-========================================= */
+===================================================== */
 
-memoryHomeBtn.addEventListener("click", function () {
+function closeMemories() {
+
+    if (!memoriesOverlay) return;
 
     stopAllVideos();
 
     memoriesOverlay.style.display = "none";
 
     /*
-     * Unlock the birthday page
+     * Unlock the website.
      */
-
     document.body.style.overflow = "";
 
-});
+}
 
 
-/* =========================================
+/* =====================================================
    CREATE MEMORIES
-========================================= */
+===================================================== */
 
 function createMemories() {
 
@@ -303,8 +289,7 @@ function createMemories() {
 
     memories.forEach((memory, index) => {
 
-        const item =
-            document.createElement("div");
+        const item = document.createElement("div");
 
         item.className = "memory-item";
 
@@ -314,65 +299,58 @@ function createMemories() {
         }
 
 
-        /* ================= IMAGE ================= */
+        /* IMAGE */
 
         if (memory.type === "image") {
 
-            const image =
-                document.createElement("img");
+            const img = document.createElement("img");
 
-            image.src = memory.src;
+            img.src = memory.src;
 
-            image.alt = "Memory " + (index + 1);
+            img.alt = "Memory " + (index + 1);
 
-            image.draggable = false;
+            img.draggable = false;
 
-            item.appendChild(image);
+            item.appendChild(img);
 
         }
 
 
-        /* ================= VIDEO ================= */
+        /* VIDEO */
 
         if (memory.type === "video") {
 
-            const video =
-                document.createElement("video");
+            const video = document.createElement("video");
 
             video.src = memory.src;
 
             /*
              * Muted by default
              */
-
             video.muted = true;
 
             /*
-             * Loop automatically
+             * Loop
              */
-
             video.loop = true;
 
+            /*
+             * Mobile support
+             */
             video.playsInline = true;
 
             /*
-             * Hide controls
+             * Hide controls.
              */
-
             video.controls = false;
 
 
             /*
-             * Tap video:
-             *
-             * paused → play
-             *
-             * playing → pause
+             * TAP VIDEO = PLAY / PAUSE
              */
+            video.addEventListener("click", function(e) {
 
-            video.addEventListener("click", function (event) {
-
-                event.stopPropagation();
+                e.stopPropagation();
 
                 if (video.paused) {
 
@@ -395,19 +373,21 @@ function createMemories() {
         memoryViewer.appendChild(item);
 
 
-        /* ================= DOT ================= */
+        /* DOT */
 
-        const dot =
-            document.createElement("button");
+        const dot = document.createElement("button");
 
         dot.className = "memory-dot";
+
 
         if (index === currentMemory) {
             dot.classList.add("active");
         }
 
 
-        dot.addEventListener("click", function () {
+        dot.addEventListener("click", function(e) {
+
+            e.stopPropagation();
 
             currentMemory = index;
 
@@ -420,12 +400,15 @@ function createMemories() {
 
     });
 
+
+    updateMemoryDisplay();
+
 }
 
 
-/* =========================================
-   SHOW MEMORY
-========================================= */
+/* =====================================================
+   SHOW CURRENT MEMORY
+===================================================== */
 
 function showMemory() {
 
@@ -457,24 +440,38 @@ function showMemory() {
 
 
     /*
-     * Pause videos that are no longer visible.
+     * Pause videos that are no longer being viewed.
      */
+    items.forEach((item, index) => {
 
-    stopAllVideos();
+        const video = item.querySelector("video");
+
+        if (video && index !== currentMemory) {
+
+            video.pause();
+
+        }
+
+    });
 
 }
 
 
-/* =========================================
+/* Alias */
+
+function updateMemoryDisplay() {
+    showMemory();
+}
+
+
+/* =====================================================
    PAUSE ALL VIDEOS
-========================================= */
+===================================================== */
 
 function stopAllVideos() {
 
     const videos =
-        document.querySelectorAll(
-            "#memoryViewer video"
-        );
+        document.querySelectorAll("#memoryViewer video");
 
     videos.forEach(video => {
 
@@ -487,11 +484,13 @@ function stopAllVideos() {
 }
 
 
-/* =========================================
-   NEXT
-========================================= */
+/* =====================================================
+   NEXT MEMORY
+===================================================== */
 
 function nextMemory() {
+
+    if (memories.length === 0) return;
 
     currentMemory++;
 
@@ -506,11 +505,13 @@ function nextMemory() {
 }
 
 
-/* =========================================
-   PREVIOUS
-========================================= */
+/* =====================================================
+   PREVIOUS MEMORY
+===================================================== */
 
 function previousMemory() {
+
+    if (memories.length === 0) return;
 
     currentMemory--;
 
@@ -525,58 +526,104 @@ function previousMemory() {
 }
 
 
-memoryNext.addEventListener(
-    "click",
-    nextMemory
-);
+/* =====================================================
+   ARROW BUTTONS
+===================================================== */
+
+memoryNext.addEventListener("click", function(e) {
+
+    e.stopPropagation();
+
+    nextMemory();
+
+});
 
 
-memoryPrev.addEventListener(
-    "click",
-    previousMemory
-);
+memoryPrev.addEventListener("click", function(e) {
+
+    e.stopPropagation();
+
+    previousMemory();
+
+});
 
 
-/* =========================================
+/* =====================================================
+   HOME BUTTON
+===================================================== */
+
+memoryHomeBtn.addEventListener("click", function(e) {
+
+    e.stopPropagation();
+
+    closeMemories();
+
+    /*
+     * Go back to the actual Home page.
+     */
+    originalShowPage("home");
+
+});
+
+
+/* =====================================================
    KEYBOARD
-========================================= */
+===================================================== */
 
-document.addEventListener("keydown", function(event) {
+document.addEventListener("keydown", function(e) {
 
-    if (memoriesOverlay.style.display !== "flex") {
+    if (
+        !memoriesOverlay ||
+        memoriesOverlay.style.display !== "flex"
+    ) {
         return;
     }
 
 
-    if (event.key === "ArrowRight") {
+    if (e.key === "ArrowRight") {
+
+        e.preventDefault();
 
         nextMemory();
 
     }
 
 
-    if (event.key === "ArrowLeft") {
+    if (e.key === "ArrowLeft") {
+
+        e.preventDefault();
 
         previousMemory();
+
+    }
+
+
+    if (e.key === "Escape") {
+
+        e.preventDefault();
+
+        closeMemories();
+
+        originalShowPage("home");
 
     }
 
 });
 
 
-/* =========================================
+/* =====================================================
    SWIPE
-========================================= */
+===================================================== */
 
-let touchStartX = 0;
+let memoryTouchStartX = 0;
 
 
 memoryViewer.addEventListener(
     "touchstart",
-    function(event) {
+    function(e) {
 
-        touchStartX =
-            event.changedTouches[0].screenX;
+        memoryTouchStartX =
+            e.changedTouches[0].screenX;
 
     },
     { passive: true }
@@ -585,28 +632,28 @@ memoryViewer.addEventListener(
 
 memoryViewer.addEventListener(
     "touchend",
-    function(event) {
+    function(e) {
 
-        const touchEndX =
-            event.changedTouches[0].screenX;
+        const memoryTouchEndX =
+            e.changedTouches[0].screenX;
 
         const difference =
-            touchStartX - touchEndX;
+            memoryTouchStartX - memoryTouchEndX;
 
 
         /*
-         * Ignore tiny movements
+         * Ignore tiny movements.
          */
-
         if (Math.abs(difference) < 50) {
+
             return;
+
         }
 
 
         /*
-         * Swipe LEFT → NEXT
+         * Swipe LEFT = NEXT
          */
-
         if (difference > 0) {
 
             nextMemory();
@@ -615,9 +662,8 @@ memoryViewer.addEventListener(
 
 
         /*
-         * Swipe RIGHT → PREVIOUS
+         * Swipe RIGHT = PREVIOUS
          */
-
         else {
 
             previousMemory();
@@ -627,5 +673,3 @@ memoryViewer.addEventListener(
     },
     { passive: true }
 );
-
-       
