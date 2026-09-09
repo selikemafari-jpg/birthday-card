@@ -396,7 +396,7 @@ const memories = [
 
     {
         type: 'video',
-        src: 'memories/video1.mp4.mp4'
+        src: 'memories/video1.mp4'
     },
 
     {
