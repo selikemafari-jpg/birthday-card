@@ -167,4 +167,465 @@
         });
 
         console.log('🎂 Happy Birthday Mell! 🎉');
+MEMORIES
+========================================= */
+
+const memories = [
+
+    {
+        type: "image",
+        src: "memories/memory1.jpg"
+    },
+
+    {
+        type: "image",
+        src: "memories/memory2.jpg"
+    },
+
+    {
+        type: "video",
+        src: "memories/video1.mp4"
+    },
+
+    {
+        type: "image",
+        src: "memories/memory3.jpg"
+    },
+
+    {
+        type: "video",
+        src: "memories/video2.mp4"
+    }
+
+];
+
+
+let currentMemory = 0;
+
+const memoriesOverlay =
+    document.getElementById("memoriesOverlay");
+
+const memoryViewer =
+    document.getElementById("memoryViewer");
+
+const memoryDots =
+    document.getElementById("memoryDots");
+
+const memoryPrev =
+    document.getElementById("memoryPrev");
+
+const memoryNext =
+    document.getElementById("memoryNext");
+
+const memoryHomeBtn =
+    document.getElementById("memoryHomeBtn");
+
+
+/* =========================================
+   YOUR EXISTING NAVIGATION
+
+   This uses:
+
+   data-page="memories"
+
+   So your button DOES NOT need changing.
+========================================= */
+
+document.querySelectorAll("[data-page]").forEach(button => {
+
+    button.addEventListener("click", function () {
+
+        const page = this.dataset.page;
+
+        if (page === "memories") {
+
+            openMemories();
+
+        }
+
+    });
+
+});
+
+
+/* =========================================
+   OPEN MEMORIES
+========================================= */
+
+function openMemories() {
+
+    /*
+     * Always start from memory #1
+     */
+
+    currentMemory = 0;
+
+    createMemories();
+
+    memoriesOverlay.style.display = "flex";
+
+    /*
+     * Lock the birthday page
+     */
+
+    document.body.style.overflow = "hidden";
+}
+
+
+/* =========================================
+   CLOSE MEMORIES
+========================================= */
+
+memoryHomeBtn.addEventListener("click", function () {
+
+    stopAllVideos();
+
+    memoriesOverlay.style.display = "none";
+
+    /*
+     * Unlock the birthday page
+     */
+
+    document.body.style.overflow = "";
+
+});
+
+
+/* =========================================
+   CREATE MEMORIES
+========================================= */
+
+function createMemories() {
+
+    memoryViewer.innerHTML = "";
+    memoryDots.innerHTML = "";
+
+
+    memories.forEach((memory, index) => {
+
+        const item =
+            document.createElement("div");
+
+        item.className = "memory-item";
+
+
+        if (index === currentMemory) {
+            item.classList.add("active");
+        }
+
+
+        /* ================= IMAGE ================= */
+
+        if (memory.type === "image") {
+
+            const image =
+                document.createElement("img");
+
+            image.src = memory.src;
+
+            image.alt = "Memory " + (index + 1);
+
+            image.draggable = false;
+
+            item.appendChild(image);
+
+        }
+
+
+        /* ================= VIDEO ================= */
+
+        if (memory.type === "video") {
+
+            const video =
+                document.createElement("video");
+
+            video.src = memory.src;
+
+            /*
+             * Muted by default
+             */
+
+            video.muted = true;
+
+            /*
+             * Loop automatically
+             */
+
+            video.loop = true;
+
+            video.playsInline = true;
+
+            /*
+             * Hide controls
+             */
+
+            video.controls = false;
+
+
+            /*
+             * Tap video:
+             *
+             * paused → play
+             *
+             * playing → pause
+             */
+
+            video.addEventListener("click", function (event) {
+
+                event.stopPropagation();
+
+                if (video.paused) {
+
+                    video.play();
+
+                } else {
+
+                    video.pause();
+
+                }
+
+            });
+
+
+            item.appendChild(video);
+
+        }
+
+
+        memoryViewer.appendChild(item);
+
+
+        /* ================= DOT ================= */
+
+        const dot =
+            document.createElement("button");
+
+        dot.className = "memory-dot";
+
+        if (index === currentMemory) {
+            dot.classList.add("active");
+        }
+
+
+        dot.addEventListener("click", function () {
+
+            currentMemory = index;
+
+            showMemory();
+
+        });
+
+
+        memoryDots.appendChild(dot);
+
+    });
+
+}
+
+
+/* =========================================
+   SHOW MEMORY
+========================================= */
+
+function showMemory() {
+
+    const items =
+        document.querySelectorAll(".memory-item");
+
+    const dots =
+        document.querySelectorAll(".memory-dot");
+
+
+    items.forEach((item, index) => {
+
+        item.classList.toggle(
+            "active",
+            index === currentMemory
+        );
+
+    });
+
+
+    dots.forEach((dot, index) => {
+
+        dot.classList.toggle(
+            "active",
+            index === currentMemory
+        );
+
+    });
+
+
+    /*
+     * Pause videos that are no longer visible.
+     */
+
+    stopAllVideos();
+
+}
+
+
+/* =========================================
+   PAUSE ALL VIDEOS
+========================================= */
+
+function stopAllVideos() {
+
+    const videos =
+        document.querySelectorAll(
+            "#memoryViewer video"
+        );
+
+    videos.forEach(video => {
+
+        video.pause();
+
+        video.controls = false;
+
+    });
+
+}
+
+
+/* =========================================
+   NEXT
+========================================= */
+
+function nextMemory() {
+
+    currentMemory++;
+
+    if (currentMemory >= memories.length) {
+
+        currentMemory = 0;
+
+    }
+
+    showMemory();
+
+}
+
+
+/* =========================================
+   PREVIOUS
+========================================= */
+
+function previousMemory() {
+
+    currentMemory--;
+
+    if (currentMemory < 0) {
+
+        currentMemory = memories.length - 1;
+
+    }
+
+    showMemory();
+
+}
+
+
+memoryNext.addEventListener(
+    "click",
+    nextMemory
+);
+
+
+memoryPrev.addEventListener(
+    "click",
+    previousMemory
+);
+
+
+/* =========================================
+   KEYBOARD
+========================================= */
+
+document.addEventListener("keydown", function(event) {
+
+    if (memoriesOverlay.style.display !== "flex") {
+        return;
+    }
+
+
+    if (event.key === "ArrowRight") {
+
+        nextMemory();
+
+    }
+
+
+    if (event.key === "ArrowLeft") {
+
+        previousMemory();
+
+    }
+
+});
+
+
+/* =========================================
+   SWIPE
+========================================= */
+
+let touchStartX = 0;
+
+
+memoryViewer.addEventListener(
+    "touchstart",
+    function(event) {
+
+        touchStartX =
+            event.changedTouches[0].screenX;
+
+    },
+    { passive: true }
+);
+
+
+memoryViewer.addEventListener(
+    "touchend",
+    function(event) {
+
+        const touchEndX =
+            event.changedTouches[0].screenX;
+
+        const difference =
+            touchStartX - touchEndX;
+
+
+        /*
+         * Ignore tiny movements
+         */
+
+        if (Math.abs(difference) < 50) {
+            return;
+        }
+
+
+        /*
+         * Swipe LEFT → NEXT
+         */
+
+        if (difference > 0) {
+
+            nextMemory();
+
+        }
+
+
+        /*
+         * Swipe RIGHT → PREVIOUS
+         */
+
+        else {
+
+            previousMemory();
+
+        }
+
+    },
+    { passive: true }
+);
+
        
