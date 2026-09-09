@@ -167,4 +167,37 @@
         });
 
         console.log('🎂 Happy Birthday Mell! 🎉');
-      
+       (function() {
+        "use strict";
+
+        // --------------------------------------------------------------
+        // 1. DEFINE YOUR MEMORIES — replace with your own images/videos
+        //    Each item: { type: 'image' or 'video', src: 'path' }
+        // --------------------------------------------------------------
+        const memories = [{
+            type: 'image',
+            src: 'https://picsum.photos/id/1015/600/800'
+        }, {
+            type: 'image',
+            src: 'https://picsum.photos/id/1016/600/800'
+        }, {
+            type: 'image',
+            src: 'https://picsum.photos/id/1018/600/800'
+        }, {
+            type: 'video',
+            src: 'https://www.w3schools.com/html/mov_bbb.mp4'
+        }, {
+            type: 'image',
+            src: 'https://picsum.photos/id/1020/600/800'
+        }, {
+            type: 'video',
+            src: 'https://www.w3schools.com/html/mov_bbb.mp4'
+        }, {
+            type: 'image',
+            src: 'https://picsum.photos/id/1024/600/800'
+        }, {
+            type: 'image',
+            src: 'https://picsum.photos/id/1027/600/800'
+        }, ];
+        // --------------------------------------------------------------
+
