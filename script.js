@@ -386,17 +386,17 @@ const memories = [
 
     {
         type: 'image',
-        src: 'bithday1.jpg'
+        src: 'memory1.jpg.jpg'
     },
 
     {
         type: 'image',
-        src: 'bitrthday2.jpg'
+        src: 'memory2.jpg.jpg'
     },
 
     {
         type: 'video',
-        src: 'memories/video1.mp4'
+        src: 'video1.mp4.mp4'
     },
 
     {
@@ -406,7 +406,7 @@ const memories = [
 
     {
         type: 'video',
-        src: 'memories/video2.mp4'
+        src: 'video2.mp4.mp4'
     }
 
 ];
