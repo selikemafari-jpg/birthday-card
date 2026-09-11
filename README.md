@@ -6,11 +6,7 @@ The project was created as a personalized digital birthday experience rather tha
 
 ## 🌐 Live Demo
 
-**[View the Birthday Card](YOUR-GITHUB-PAGES-LINK-HERE)**
-
-## 📸 Preview
-
-*Add screenshots or a GIF of the website here.*
+**[View the Birthday Card](https://selikemafari-jpg.github.io/birthday-card/)**
 
 ## ✨ Features
 
