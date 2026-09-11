@@ -1,4 +1,11 @@
-// =========================================================
+/*
+  Interactive Birthday Card
+  Created by Selikem Afari
+  https://github.com/selikemafari-jpg/birthday-card
+
+  Copyright © 2026 Selikem Afari
+  Licensed under the MIT License.
+*/// =========================================================
 // PARTICLES
 // =========================================================
 
